@@ -45,7 +45,7 @@ const LatestPosts = () => {
           const { categoryName, categoryLink } = FindCategory(category);
 
           return (
-            <div className="index-column" key={id}>
+            <article className="index-column hentry" key={id}>
               <div className="index-col-image">
                 <Link to={`${slug}/`}>
                   <picture>
@@ -54,13 +54,15 @@ const LatestPosts = () => {
                   </picture>
                 </Link>
               </div>
-              <div className="index-box-category">
-                <Link to={`${categoryLink}/`}>{categoryName}</Link>
-              </div>
+              {categoryLink && (
+                <div className="index-box-category" rel="bookmark">
+                  <Link to={`${categoryLink}/`}>{categoryName}</Link>
+                </div>
+              )}
               <div className="index-box-title">
                 <Link to={`${slug}/`}>{title}</Link>
               </div>
-            </div>
+            </article>
           );
         })}
         {FillSpace(posts.length, "index-column", 3)}

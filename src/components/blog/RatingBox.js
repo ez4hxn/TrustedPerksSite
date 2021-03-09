@@ -1,5 +1,5 @@
 import React from "react";
-import Star from "../../svg-icons/star.js";
+import { Star } from "../SVG.js";
 
 const RatingBox = ({ count, value }) => {
   const pingPong = () => {

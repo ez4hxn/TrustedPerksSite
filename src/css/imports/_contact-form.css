@@ -21,9 +21,6 @@
   transition-duration: 0.3s;
   box-shadow: none;
 }
-.form-group textarea {
-  resize: none;
-}
 textarea.form-control {
   height: auto;
 }
@@ -38,18 +35,6 @@ textarea.form-control {
 }
 .contactform .field:last-child {
   margin-bottom: 0;
-}
-.contactform .btnsubmit {
-  position: relative;
-  margin: 10px 1px;
-  padding: 12px 30px;
-  border: none;
-  border-radius: 5px;
-  white-space: normal;
-  letter-spacing: 0;
-  text-transform: uppercase;
-  background-color: var(--custom-color-5);
-  color: var(--custom-color-4);
 }
 form[name="contact"] .field button {
   background-color: var(--custom-color-5);

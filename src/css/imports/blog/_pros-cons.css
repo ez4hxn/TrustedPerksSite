@@ -21,7 +21,7 @@
   padding: 0.5em 1em;
   font-weight: 600;
   font-size: 1.1em;
-  color: #ffffff;
+  color: var(--custom-color-8);
 }
 .su-box-content {
   padding: 1em;

@@ -33,13 +33,13 @@ const Author = ({ authorID }) => {
 
     return (
       author && (
-        <div className="author">
+        <div className="author" itemProp="author">
           <Link to={`/author/${slug}/`} className="author-img-link">
             <img src={`/img/${img}`} alt={title} loading="lazy" className="author-img" width={width} height={height} />
           </Link>
-          <div className="author-text">
-            <Link to={`/author/${slug}/`} className="author-title-link">
-              {title}
+          <div className="author-text vcard" itemScope itemType="https://schema.org/Person">
+            <Link to={`/author/${slug}/`} className="author-title-link url fn" itemProp="url" rel="author">
+              <span itemProp="name">{title}</span>
             </Link>
             <p>{description}</p>
           </div>

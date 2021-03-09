@@ -2,13 +2,16 @@ const _ = require("lodash");
 const path = require("path");
 const { fmImagesToRelative } = require("gatsby-remark-relative-images");
 const sharp = require(`sharp`);
+const gihubSlugger = require("github-slugger");
+const slugger = new gihubSlugger();
+const { createFilePath } = require(`gatsby-source-filesystem`);
 
 exports.createPages = ({ actions, graphql }) => {
   const { createPage } = actions;
 
   return graphql(`
     {
-      pages: allMarkdownRemark(filter: { frontmatter: { templateKey: { in: ["default-page", "index-page"] } } }) {
+      pages: allMarkdownRemark(filter: { frontmatter: { templateKey: { in: ["default-page", "index-page", "about-page"] } } }) {
         nodes {
           id
           fields {
@@ -17,6 +20,7 @@ exports.createPages = ({ actions, graphql }) => {
           frontmatter {
             templateKey
             title
+            static
           }
         }
       }
@@ -59,6 +63,10 @@ exports.createPages = ({ actions, graphql }) => {
           id
           rawBody
           body
+          headings {
+            value
+            depth
+          }
           fields {
             slug
           }
@@ -87,6 +95,11 @@ exports.createPages = ({ actions, graphql }) => {
           }
         }
       }
+      siteSettings: markdownRemark(frontmatter: { templateKey: { eq: "site-data" } }) {
+        frontmatter {
+          linkType
+        }
+      }
     }
   `).then((result) => {
     if (result.errors) {
@@ -103,11 +116,10 @@ exports.createPages = ({ actions, graphql }) => {
 
     const allImages = [];
 
-    const CreateID = (name) =>
-      name
-        .replace(/[^\w ]/, "")
-        .split(" ")
-        .join("_");
+    const createID = (name) => {
+      slugger.reset();
+      return slugger.slug(name);
+    };
 
     const createImages = async (match, type, options, mobile = false) => {
       const name = match.split("/").filter(Boolean).pop();
@@ -126,7 +138,7 @@ exports.createPages = ({ actions, graphql }) => {
         const id = category.id;
         const categoryID = category.frontmatter.id;
         const slug = category.fields.slug;
-        const categoryCount = categoriesCount.filter((categoryCount) => categoryCount.category === categoryID)[0];
+        const categoryCount = categoriesCount.find((categoryCount) => categoryCount.category === categoryID);
         const totalPosts = categoryCount && categoryCount.totalCount;
         const postsPerPage = 6;
         const numPages = totalPosts ? Math.ceil(totalPosts / postsPerPage) : 1;
@@ -156,7 +168,7 @@ exports.createPages = ({ actions, graphql }) => {
         const id = author.id;
         const authorID = author.frontmatter.id;
         const slug = `/author${author.fields.slug}`;
-        const authorCount = authorsCount.filter((authorCount) => authorCount.author === authorID)[0];
+        const authorCount = authorsCount.find((authorCount) => authorCount.author === authorID);
         const totalPosts = authorCount && authorCount.totalCount;
         const postsPerPage = 6;
         const numPages = totalPosts ? Math.ceil(totalPosts / postsPerPage) : 1;
@@ -185,10 +197,11 @@ exports.createPages = ({ actions, graphql }) => {
       pages.forEach((page) => {
         const id = page.id;
         const slug = page.fields.slug;
-        const tempKey = page.frontmatter.templateKey;
+        const static = page.frontmatter.static;
+        const tempKey = page.frontmatter.templateKey === "about-page" || static ? "default-page" : page.frontmatter.templateKey;
 
         createPage({
-          path: slug == "/index" ? "/" : `${slug}/`,
+          path: slug === "/" ? slug : `${slug}/`,
           component: path.resolve(`src/templates/${tempKey}.js`),
           // additional data can be passed via context
           context: {
@@ -204,15 +217,20 @@ exports.createPages = ({ actions, graphql }) => {
       posts.forEach((post) => {
         const id = post.id;
         const slug = post.fields.slug;
+        const headings = post.headings;
 
-        const match = `./static/img/${post.frontmatter.featuredimage.base}`;
-        createImages(match, "category", { width: 348 });
-        createImages(match, "front-first", { width: 675 });
-        createImages(match, "front-right", { width: 195 });
-        createImages(match, "latest", { width: 385 });
-        createImages(match, "post-first", { width: 868 });
-        createImages(match, "post-first", { width: 450 }, true);
-        createImages(match, "post-latest", { width: 230 });
+        try {
+          const match = `./static/img/${post.frontmatter.featuredimage.base}`;
+          createImages(match, "category", { width: 348 });
+          createImages(match, "front-first", { width: 675 });
+          createImages(match, "front-right", { width: 195 });
+          createImages(match, "latest", { width: 385 });
+          createImages(match, "post-first", { width: 868 });
+          createImages(match, "post-first", { width: 450 }, true);
+          createImages(match, "post-latest", { width: 230 });
+        } catch (e) {
+          throw `Featured Image not found for post ${slug}`;
+        }
 
         const sidebar = post.frontmatter.sidebar;
         if (sidebar !== null && sidebar.image !== null) {
@@ -239,15 +257,14 @@ exports.createPages = ({ actions, graphql }) => {
         }
 
         let m;
-        let str = post.rawBody;
-        str = str.split("\\").join("");
-        str1 = post.frontmatter.beforebody + post.body;
-        str2 = post.frontmatter.afterbody;
+        let str1 = post.body;
+        let str2 = post.frontmatter.afterbody;
 
         const tocData = [];
         const tocRex1 = /(mdx\(PTitle, ({[^}]*}))/g;
         const tocRex2 = /(title: "([^"]*)")/g;
         const tocRex3 = /(hlevel: "([^"]*)")/g;
+
         while ((m = tocRex1.exec(str1))) {
           let title;
           let heading;
@@ -261,16 +278,25 @@ exports.createPages = ({ actions, graphql }) => {
           tocData.push({
             title,
             heading: heading || "2",
-            id: title && CreateID(title),
+            id: title && createID(title),
           });
         }
+
+        headings.forEach((item) => {
+          if (item.depth <= 3)
+            tocData.push({
+              title: item.value,
+              headings: item.depth.toString(),
+              id: createID(item.value),
+            });
+        });
 
         if (products !== null) {
           products.forEach((item) => {
             tocData.push({
               title: item.name,
               heading: "3",
-              id: CreateID(item.name),
+              id: createID(item.name),
             });
           });
         }
@@ -288,12 +314,12 @@ exports.createPages = ({ actions, graphql }) => {
           tocData.push({
             title,
             heading: heading || "2",
-            id: title && CreateID(title),
+            id: title && createID(title),
           });
         }
 
         createPage({
-          path: slug == "/index" ? "/" : `${slug}/`,
+          path: `${slug}/`,
           component: path.resolve(`src/templates/blog-post.js`),
           // additional data can be passed via context
           context: {
@@ -308,7 +334,37 @@ exports.createPages = ({ actions, graphql }) => {
   });
 };
 
-exports.onCreateNode = ({ node }) => {
+exports.onCreateNode = ({ node, getNode, actions, getNodes }) => {
+  const { createNodeField } = actions;
+
+  if (node.internal.type === `MarkdownRemark`) {
+    const slug = !!node.frontmatter.slug ? `/${node.frontmatter.slug}` : createFilePath({ node, getNode, basePath: `src/pages`, trailingSlash: false });
+    createNodeField({
+      node,
+      name: `slug`,
+      value: slug,
+    });
+  }
+
+  if (node.internal.type === "Mdx") {
+    let slug = `/${node.frontmatter.slug}`;
+
+    const linkType = !!getNodes().find((_node) => !!_node.frontmatter && _node.frontmatter.templateKey === "site-data").frontmatter.linkType;
+
+    if (linkType) {
+      const category = node.frontmatter.category;
+      let categorySlug = getNodes().find((_node) => !!_node.frontmatter && _node.frontmatter.id === category);
+      categorySlug = categorySlug && categorySlug.fields.slug;
+      slug = !!categorySlug ? `${categorySlug + slug}` : slug;
+    }
+
+    createNodeField({
+      node,
+      name: "slug",
+      value: slug,
+    });
+  }
+
   fmImagesToRelative(node);
 };
 
@@ -316,35 +372,54 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
   createTypes(`
   type Mdx implements Node {
     frontmatter: MdxFrontmatter
+    fields: MdxFields
   }
 
-  type MdxFrontmatter {
+  type MdxFields {
+    slug: String
+  }
+
+  type MdxFrontmatter @infer {
+    templateKey: String
+    featuredimage: File @fileByRelativePath
     beforebody: String @mdx
     afterbody: String @mdx
     products: [Product]
     sidebar: Sidebar
     faq: [Faq]
     table: ProductTable
-      title: String
+    title: String
     btnText: String
+    hidefeaturedimage: Boolean
+    author: String
+    category: String
+    slug: String
+    seoDescription: String
+    seoTitle: String
+    date(formatString: String, fromNow: Boolean): Date @dateformat
+    moddate(formatString: String, fromNow: Boolean): Date @dateformat
+    tableofcontent: Boolean
+    rating: Boolean
+    rcount: Int
+    rvalue: Int
   }
 
-  type Product {
+  type Product @infer {
     name: String
     seoName: String
     btnText: String
     body: String @mdx
-    image: File
+    image: File @fileByRelativePath
     link: String
     pros: [String]
     cons: [String]
     specs: [Spec]
   }
 
-  type Sidebar {
+  type Sidebar @infer {
     stoc: [SidebarToC]
     stitle: String
-    image: File
+    image: File @fileByRelativePath
     alink: String
     atext: String
   }
@@ -367,14 +442,16 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
   type ProductTable {
     table: Boolean
     title: String
+    headTitle: String
     seoTitle: String
+    productColumns: [String]
   }
 
   type MarkdownRemark implements Node {
     frontmatter: MarkdownFrontmatter
   }
 
-  type MarkdownFrontmatter {
+  type MarkdownFrontmatter @infer {
     templateKey: String
     id: String
     categories: [HomeCategory]
@@ -382,14 +459,37 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     description: String
     seoTitle: String
     seoDescription: String
+    image: File @fileByRelativePath
     schema: String
+    cookies: Cookies
+    disqus: String
+    facebook: String
+    twitter: String
+    youtube: String
+    number: String
     topNav: [Nav]
+    colors: Colors
+    ads: Ads
     footerNav: [CategoryLink]
+    logoSmall: File! @fileByRelativePath
+    logoLarge: File! @fileByRelativePath
+    faviconSmall: File! @fileByRelativePath
+    faviconLarge: File! @fileByRelativePath
+    linkType: Boolean
+    static: Boolean
+    nofollow: [String]
+    noindex: [String]
+    sitemap: [String]
   }
 
   type HomeCategory {
     title: String
     links: [CategoryLink]
+  }
+
+  type Cookies {
+    enabled: Boolean
+    message: String
   }
 
   type CategoryLink {
@@ -402,5 +502,36 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     link: String
     child: [Nav]
   }
+
+  type Colors @infer {
+    headerTextColor: String
+  }
+
+  type Ads @infer {
+    enableAds: Boolean
+    disabledPostsAds: [String]
+    adCodes: AdCodes
+  }
+
+  type AdCodes @infer {
+    afterToC: String 
+    afterTitle: String 
+    insideBody: String 
+    sidebarSticky: String
+    beforeAuthor: String
+    stickyMobile: String
+  }
 `);
+};
+
+exports.onCreateWebpackConfig = ({ stage, actions }) => {
+  if (stage.startsWith("develop")) {
+    actions.setWebpackConfig({
+      resolve: {
+        alias: {
+          "react-dom": "@hot-loader/react-dom",
+        },
+      },
+    });
+  }
 };

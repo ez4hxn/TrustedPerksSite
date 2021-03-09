@@ -3,7 +3,7 @@
 }
 .toc-sidebar {
   font-size: 95%;
-  padding-bottom: 0;
+  padding-bottom: 5px;
   background-color: var(--custom-color-2);
   overflow: hidden;
   z-index: 1;
@@ -12,11 +12,14 @@
   position: sticky;
   display: block;
 }
+.toc-sidebar:empty {
+  display: none;
+}
 .toc-sidebar .toctitle {
   text-align: center;
   padding: 5px 0;
   background-color: var(--custom-color-3);
-  color: #ffffff;
+  color: var(--custom-color-8);
   font-weight: 700;
   font-size: 20px;
   margin-bottom: 0 !important;
@@ -57,7 +60,7 @@
   text-align: center;
   padding: 5px 0;
   background-color: var(--custom-color-3);
-  color: #FFFFFF;
+  color: var(--custom-color-8);
   font-weight: 700;
   font-size: 20px;
   margin-bottom: 8px !important;
@@ -77,20 +80,14 @@
   top: 20px;
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   border: none;
+  color: var(--custom-color-7);
   background: var(--custom-color-5);
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
   padding: 10px;
-}
-.sidebar-btn span {
-  height: 1px;
-  width: 100%;
-  background: var(--custom-color-7);
-  display: block;
 }
 .site-info {
   background-color: var(--custom-color-2);

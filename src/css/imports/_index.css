@@ -126,7 +126,7 @@
   text-align: center;
   padding: 7px 0;
   background-color: var(--custom-color-3);
-  color: #fff;
+  color: var(--custom-color-8);
   font-weight: 700;
   font-size: 26px;
 }
@@ -171,12 +171,11 @@
   flex: 1;
   width: 100%;
   height: 2px;
-  background: #000000;
-  margin-bottom: 20px;
+  background: var(--custom-color-5);
 }
 .index-latest-title h2 {
   font-size: 18px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   position: absolute;
   background-color: var(--custom-color-1);
   left: 30px;
@@ -224,7 +223,7 @@
   }
   .category-section h2 {
     font-size: 30px;
-    margin-bottom: 25px;
+    margin-bottom: 0px;
   }
   .first-post-info .post-info-title a {
     font-size: 27px;

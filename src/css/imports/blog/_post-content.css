@@ -119,6 +119,15 @@ body .blog-post .product_title_s1 {
   border: none;
   text-align: center;
 }
+.products .product-box:first-child {
+  padding-top: 0;
+}
+* ~ .products {
+  padding-top: 10px;
+}
+.post-content:empty {
+  display: none;
+}
 @media (max-width: 767px) {
   .su-button {
     font-size: 18px;
@@ -136,10 +145,6 @@ body .blog-post .product_title_s1 {
   }
   .post-content {
     padding: 20px 12px;
-  }
-  .blog-section-top-inner {
-    padding-left: 12px;
-    padding-right: 12px;
   }
   .blog-post h4 {
     font-size: 24px;

@@ -17,3 +17,5 @@ static/image/post-latest/*.webp
 static/image/sidebar/*.webp
 static/image/table/*.webp
 .env
+# Local Netlify folder
+.netlify

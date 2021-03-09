@@ -6,7 +6,7 @@ import { CreateID } from "../SimpleFunctions.js";
 export const BButton = ({ link, title }) => {
   return (
     <div className="su-button-center">
-      <a href={link} className="su-button" target="_blank" rel="noreferrer nofollow">
+      <a href={link} className="su-button" target="_blank" rel="nofollow">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path fill="currentColor" d="M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm113.9 231L234.4 103.5c-9.4-9.4-24.6-9.4-33.9 0l-17 17c-9.4 9.4-9.4 24.6 0 33.9L285.1 256 183.5 357.6c-9.4 9.4-9.4 24.6 0 33.9l17 17c9.4 9.4 24.6 9.4 33.9 0L369.9 273c9.4-9.4 9.4-24.6 0-34z"></path>
         </svg>
@@ -88,7 +88,7 @@ export const PTitle = ({ title, beforeTitle, afterTitle, link, hlevel, cName = "
     <Heading id={id} className={cEnable !== false ? `${cName}` : ""}>
       {beforeTitle}
       {disableTitle === "true" ? null : link ? (
-        <a href={link} target="_blank" rel="nofollow noopener noreferrer">
+        <a href={link} target="_blank" rel="nofollow noopener">
           {title}
         </a>
       ) : (
@@ -173,30 +173,42 @@ export const TableOfContents = ({ data }) => {
   );
 };
 
-export const ProductsTable = ({ products, title }) => {
+export const ProductsTable = ({ products, title, productColumns, headTitle }) => {
   return (
     <table className="tablepress table_s1">
       <thead>
         <tr className="row-1 odd">
           {title && <th className="tb-column">{title}</th>}
-          <th className="tb-column">Model</th>
+          <th className="tb-column">{headTitle || "Model"}</th>
+          {productColumns?.map((column, index) => (
+            <th key={index} className="tb-column">
+              {column}
+            </th>
+          ))}
           <th className="tb-column">&nbsp;</th>
         </tr>
       </thead>
       <tbody className="row-hover">
-        {products?.map((item, index) => (
+        {products?.map((product, index) => (
           <tr key={index}>
-            {title && <td className="tb-column">{item.seoName}</td>}
+            {title && (
+              <td className="tb-column">
+                <strong>{product.seoName}</strong>
+              </td>
+            )}
             <td className="tb-column">
               <div className="item-detail">
-                <div>
-                  <TImage alt={item.name} src={item.image.base} />
-                </div>
-                <a href={`#${CreateID(item.name)}`}>{item.name}</a>
+                <div>{product.image && <TImage alt={product.name} src={product.image.base} />}</div>
+                <a href={`#${CreateID(product.name)}`}>{product.name}</a>
               </div>
             </td>
+            {productColumns?.map((column, index) => (
+              <td key={index} className="tb-column">
+                {product.specs?.find((spec) => spec.name === column)?.value}
+              </td>
+            ))}
             <td className="tb-column">
-              <a href={item.link} className="su-button" target="_blank" rel="nofollow noreferrer">
+              <a href={product.link} className="su-button" target="_blank" rel="nofollow">
                 <span> Check Price</span>
               </a>
             </td>
@@ -204,6 +216,19 @@ export const ProductsTable = ({ products, title }) => {
         ))}
       </tbody>
     </table>
+  );
+};
+
+export const FeaturesBox = ({ title, features }) => {
+  return (
+    <div className="features_box">
+      <h3>{title}</h3>
+      <ul>
+        {features.map((item, index) => (
+          <li key={index} dangerouslySetInnerHTML={{ __html: item }}></li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

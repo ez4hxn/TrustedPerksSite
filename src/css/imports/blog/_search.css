@@ -1,10 +1,6 @@
-.sidebar .instant-search {
-  max-width: 100%;
-  margin-bottom: 15px;
-}
 .instant-search {
-  width: 550px;
-  max-width: 90%;
+  max-width: 100%;
+  margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
@@ -29,9 +25,6 @@
   background-color: var(--custom-color-2);
   color: var(--custom-color-4);
   width: 100%;
-}
-.ais-SearchBox {
-  text-align: center;
 }
 .instant-search [type="search"]::placeholder {
   color: var(--custom-color-4);

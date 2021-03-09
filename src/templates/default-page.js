@@ -2,19 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout";
-import Content, { HTMLContent } from "../components/Content";
 import HeadData from "../components/HeadData.js";
 import SiteMetaData from "../components/SiteMetadata.js";
+import { ReplaceTitle } from "../components/SimpleFunctions.js";
 
-export const DefaultPageTemplate = ({ title, content, contentComponent }) => {
-  const PageContent = contentComponent || Content;
+export const DefaultPageTemplate = ({ title, body, siteName, siteLink }) => {
+  const url = new URL(siteLink);
 
   return (
     <section className="section default-page">
       <div className="container">
         <div className="content">
           <h1 className="title">{title}</h1>
-          <PageContent content={content} />
+          <div dangerouslySetInnerHTML={{ __html: ReplaceTitle(body, { siteLinkNoProtocol: url.hostname, siteName, siteLink }) }} />
         </div>
       </div>
     </section>
@@ -23,18 +23,56 @@ export const DefaultPageTemplate = ({ title, content, contentComponent }) => {
 
 DefaultPageTemplate.propTypes = {
   title: PropTypes.string.isRequired,
-  content: PropTypes.string,
-  contentComponent: PropTypes.func,
+  body: PropTypes.string,
+  siteName: PropTypes.string,
 };
 
 const DefaultPage = ({ data }) => {
-  const { title: siteName } = SiteMetaData();
+  const { title: siteName, siteURL, logoLarge } = SiteMetaData();
   const { markdownRemark: post } = data;
+  const { title, seoTitle, seoDescription } = post.frontmatter;
+  const slug = post.fields.slug;
+  const pageType = post.frontmatter.templateKey;
+  const {
+    base,
+    childImageSharp: {
+      original: { width, height },
+    },
+  } = logoLarge;
+
+  const aboutUsSchema = `{
+    "@context":"https://schema.org",
+    "@type":"AboutPage",
+    "mainEntityOfPage":{
+      "@type":"WebPage",
+      "@id":"${siteURL + slug}/"
+    },
+    "url":"${siteURL + slug}/",
+    "headline":"${title}",
+    "description":"${seoDescription}",
+    "image":{
+      "@type":"ImageObject",
+      "@id":"${siteURL + slug}/#primaryimage",
+      "url":"${siteURL}/img/${base}",
+      "width":"${width.toString()}",
+      "height":"${height.toString()}"
+    },
+    "publisher":{
+      "@type":"Organization",
+      "name":"${siteName}",
+      "logo":{
+        "@type":"ImageObject",
+        "url":"${siteURL}/img/${base}",
+        "width":"${width.toString()}",
+        "height":"${height.toString()}"
+      }
+    }
+  },`;
 
   return (
-    <Layout title={post.frontmatter.title}>
-      <HeadData title={`${post.frontmatter.seoTitle} - ${siteName}`} description={post.frontmatter.seoDescription} schema={post.frontmatter.schema} />
-      <DefaultPageTemplate contentComponent={HTMLContent} title={post.frontmatter.title} content={post.html} />
+    <Layout title={title}>
+      <HeadData title={`${seoTitle} - ${siteName}`} description={seoDescription} schema={pageType === "about-page" ? aboutUsSchema : false} />
+      <DefaultPageTemplate title={title} body={post.html} siteName={siteName} siteLink={siteURL} />
     </Layout>
   );
 };
@@ -49,11 +87,14 @@ export const defaultPageQuery = graphql`
   query DefaultPageByID($id: String!) {
     markdownRemark(id: { eq: $id }) {
       html
+      fields {
+        slug
+      }
       frontmatter {
+        templateKey
         title
         seoTitle
         seoDescription
-        schema
       }
     }
   }

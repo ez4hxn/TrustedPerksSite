@@ -31,7 +31,6 @@
   border: none;
   color: var(--custom-color-5);
   font-size: 16px;
-  font-weight: 800;
   transition: color 0.3s ease-out;
 }
 .post_toc_btn:hover {
@@ -43,18 +42,18 @@
 }
 .toc-bottom .toc-bottom-heading {
   font-size: 20px;
-  color: #FFFFFF;
+  color: var(--custom-color-8);
   font-weight: 700;
   background-color: var(--custom-color-3);
   text-align: center;
   padding: 5px 0;
 }
-.toc-bottom a {
+.toc-bottom div {
   display: block;
   padding: 5px;
   text-align: center;
 }
-.toc-bottom a p {
+.toc-bottom div p {
   font-weight: 500;
   margin-bottom: 0;
   font-size: 15px;
@@ -62,8 +61,7 @@
 .toc-bottom img {
   width: auto;
 }
-.toc-bottom {
-  padding-bottom: 4px;
+.toc-top + .toc-bottom {
   margin-top: 8px;
 }
 @media (max-width: 767px) {
@@ -71,4 +69,3 @@
     width: 98%;
   }
 }
-

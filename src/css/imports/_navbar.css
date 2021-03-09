@@ -2,8 +2,8 @@
   position: relative;
   z-index: 30;
   padding: 6px 0.75rem;
-  box-shadow: #000000;
-  background-color: #000000;
+  box-shadow: var(--default-box-shadow);
+  background-color: var(--custom-color-2);
 }
 .navbar .container {
   display: flex;
@@ -14,7 +14,7 @@
 }
 .navbar-brand a.navbar-item:focus,
 .navbar-brand a.navbar-item:hover {
-  background-color: #FFFFFF;
+  background-color: transparent;
 }
 .navbar-burger {
   cursor: pointer;
@@ -23,11 +23,11 @@
   position: relative;
   min-width: 3.25rem;
   margin-left: auto;
-  background-color: #000000;
+  background-color: var(--custom-color-5);
 }
 .navbar-burger span,
 .footer-burger span {
-  background-color: #FFFFFF;
+  background-color: var(--custom-color-7);
   display: block;
   height: 1px;
   left: calc(50% - 8px);
@@ -52,7 +52,7 @@
 }
 .navbar-burger:hover,
 .footer-burger:hover {
-  background-color: #000000;
+  background-color: var(--custom-color-6);
 }
 .navbar-burger.is-active span:nth-child(1),
 .footer-burger.is-active span:nth-child(1) {
@@ -67,7 +67,7 @@
   transform: translateY(-5px) rotate(-45deg);
 }
 .navbar-item {
-  color:  #FFFFFF;
+  color: var(--custom-color-4);
   line-height: 1.5;
   position: relative;
   font-weight: 500;
@@ -81,7 +81,7 @@
   padding-right: 20px;
 }
 .navbar-item-link {
-  color:  #FFFFFF;
+  color: var(--custom-color-4);
   padding: 0.5rem 0.75rem;
 }
 .nav-child-first {
@@ -89,9 +89,8 @@
   overflow: hidden;
   position: absolute;
   top: 35px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #f1f1f1;
+  right: 0;
+  background: var(--custom-color-1);
 }
 .open-parent svg {
   width: 12px;
@@ -107,7 +106,7 @@
   justify-content: flex-start;
 }
 .navbar-parent-two .nav-child-first > .navbar-item > .navbar-item-link {
-  color: #000000;
+  color: var(--custom-color-4);
 }
 .open-parent {
   display: flex;
@@ -124,7 +123,7 @@
   }
   div#navMenu .navbar-end {
     margin-top: 10px;
-    background-color: #ff9c00;
+    background-color: var(--custom-color-5);
   }
   .navbar-item {
     border-bottom: 1px solid var(--custom-color-7);
@@ -140,7 +139,7 @@
     transform: none;
     width: 100%;
     flex-wrap: wrap;
-    background: #000000;
+    background: var(--custom-color-5);
   }
   .open-parent {
     position: absolute;
@@ -153,7 +152,7 @@
   }
   .nav-child-first {
     border-style: solid;
-    border-color: #ff9c00;
+    border-color: var(--custom-color-4);
     border-width: 1px 1px 0;
   }
   .navbar-menu {
@@ -162,7 +161,7 @@
     transition: height 0.3s ease-out;
   }
   .navbar-parent-two > .nav-child-first > .navbar-item > .navbar-item-link {
-    border: #FFFFFF;
+    border: 1px solid var(--custom-color-4);
     pointer-events: none;
     padding: 5px 0;
   }
@@ -173,14 +172,13 @@
 @media screen and (min-width: 1024px) {
   .navbar,
   .navbar-menu,
-  .navbar-start,
   .navbar-end {
     display: flex;
   }
   .navbar.is-transparent a.navbar-item:focus,
   .navbar.is-transparent a.navbar-item:hover,
   .navbar.is-transparent a.navbar-item.is-active {
-    background-color: #ff9c00 !important;
+    background-color: transparent !important;
   }
   .navbar-burger {
     display: none;
@@ -194,10 +192,6 @@
     justify-content: flex-end;
     align-items: center;
   }
-  .navbar-start {
-    justify-content: flex-start;
-    margin-right: auto;
-  }
   .navbar .container .navbar-menu {
     margin-right: -0.75rem;
   }
@@ -205,7 +199,7 @@
     color: #2b2523;
   }
   a.navbar-item.is-active:not(:focus):not(:hover) {
-    background-color: #ff9c00;
+    background-color: transparent;
   }
   div#navMenu {
     height: auto !important;
@@ -218,7 +212,7 @@
   .navbar-item:focus a,
   .navbar-item:hover svg,
   .navbar-item:focus svg {
-    color: #ff9c00;
+    color: var(--custom-color-5);
   }
   .navbar-parent-one > .navbar-item-link,
   .navbar-parent-two > .navbar-item-link {
@@ -229,6 +223,6 @@
     display: flex;
   }
   .navbar-item .navbar-item .navbar-item-link {
-    color: #000000;
+    color: var(--custom-color-5);
   }
 }

@@ -1,5 +1,8 @@
 import { useStaticQuery, graphql } from "gatsby";
 import React from "react";
+import slugify from "github-slugger";
+
+const slugger = new slugify();
 
 export const FillSpace = (length, className = "index-column", max = 6) => {
   const space = [];
@@ -29,11 +32,12 @@ export const FindAuthor = (ID) => {
   return { authorName, authorLink };
 };
 
-export const CreateID = (name) =>
-  name
-    .replace(/[^\w ]/, "")
-    .split(" ")
-    .join("_");
+export const CreateID = (name) => {
+  slugger.reset();
+  return slugger.slug(name);
+};
+
+export const LinkFix = (item) => (item.link?.includes("/") ? item.link : `/${item.link}/`);
 
 const FindItems = () => {
   const { authors, categories } = useStaticQuery(graphql`
@@ -64,4 +68,14 @@ const FindItems = () => {
   `);
 
   return { authors, categories };
+};
+
+export const ReplaceTitle = (content, data) => {
+  return content.replace(/\[\[([^\]]+)\]\]/g, (match, key) => {
+    const value = data[key];
+    if (typeof value !== "undefined") {
+      return value;
+    }
+    return match; // guards against some unintentional prefix
+  });
 };

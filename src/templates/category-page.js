@@ -144,7 +144,7 @@ export const pageQuery = graphql`
           title
           author
           templateKey
-          date(formatString: "MMMM DD, YYYY")
+          date(fromNow: true)
           sdate: date(formatString: "YYYY-MM-DDTHHmmss")
           moddate(formatString: "YYYY-MM-DDTHHmmss")
           featuredimage {

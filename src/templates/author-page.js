@@ -15,7 +15,7 @@ const AuthorPage = (props) => {
   const { width, height } = post.frontmatter.image.childImageSharp.original;
 
   return (
-    <Layout title={title}>
+    <Layout>
       <HeadData title={`${seoTitle} - ${siteName}`} description={seoDescription} />
       <section className="section author-page">
         <div className="container">
@@ -120,31 +120,6 @@ export default AuthorPage;
 
 export const authorPageQuery = graphql`
   query AuthorPageByID($id: String!, $author: String!, $skip: Int!, $limit: Int!) {
-    allMdx(sort: { order: DESC, fields: [frontmatter___date] }, filter: { frontmatter: { author: { eq: $author } } }, limit: $limit, skip: $skip) {
-      edges {
-        node {
-          id
-          fields {
-            slug
-          }
-          frontmatter {
-            title
-            category
-            date(formatString: "MMMM DD, YYYY")
-            featuredimage {
-              name
-              base
-              childImageSharp {
-                original {
-                  height
-                  width
-                }
-              }
-            }
-          }
-        }
-      }
-    }
     markdownRemark(id: { eq: $id }) {
       frontmatter {
         title
@@ -157,6 +132,31 @@ export const authorPageQuery = graphql`
             original {
               height
               width
+            }
+          }
+        }
+      }
+    }
+    allMdx(sort: { order: DESC, fields: [frontmatter___date] }, filter: { frontmatter: { author: { eq: $author } } }, limit: $limit, skip: $skip) {
+      edges {
+        node {
+          id
+          fields {
+            slug
+          }
+          frontmatter {
+            title
+            category
+            date(fromNow: true)
+            featuredimage {
+              name
+              base
+              childImageSharp {
+                original {
+                  height
+                  width
+                }
+              }
             }
           }
         }

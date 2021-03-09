@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { Link, graphql } from "gatsby";
 import Layout from "../components/Layout";
 import HeadData from "../components/HeadData.js";
-import Calendar from "../svg-icons/calendar.js";
+import { Calendar } from "../components/SVG.js";
 import SiteMetaData from "../components/SiteMetadata.js";
-import { FindCategory, FillSpace } from "../components/SimpleFunctions.js";
+import { FindCategory, FillSpace, LinkFix } from "../components/SimpleFunctions.js";
 
 const IndexTemplate = ({ data }) => {
   const singlePost = data.FP.nodes[0];
@@ -70,7 +70,7 @@ const IndexTemplate = ({ data }) => {
             <h2>Latest Posts</h2>
           </div>
           <div className="index-top-section">
-            <FirstPost post={singlePost} />
+            {singlePost && <FirstPost post={singlePost} />}
             <OtherPosts posts={otherPosts} />
           </div>
           <div className="index-bottom-section">
@@ -85,9 +85,9 @@ const IndexTemplate = ({ data }) => {
                     <div className="index-category" key={index}>
                       <h2>{item.title}</h2>
                       <div className="category-links">
-                        {item.links.map((item, index) => (
+                        {item.links?.map((item, index) => (
                           <div className="category-link" key={index}>
-                            <Link to={item.link.includes("/") ? item.link : `/${item.link}/`}>{item.title}</Link>
+                            <Link to={LinkFix(item)}>{item.title}</Link>
                           </div>
                         ))}
                       </div>
@@ -220,6 +220,20 @@ const Sections = ({ sections }) => {
 
 export const IndexQuery = graphql`
   query IndexQuery($id: String!) {
+    markdownRemark(id: { eq: $id }) {
+      html
+      frontmatter {
+        seoTitle
+        seoDescription
+        categories {
+          title
+          links {
+            title
+            link
+          }
+        }
+      }
+    }
     FP: allMdx(sort: { order: DESC, fields: [frontmatter___date] }, limit: 1) {
       nodes {
         fields {
@@ -249,7 +263,7 @@ export const IndexQuery = graphql`
         }
         frontmatter {
           title
-          date(formatString: "MMMM DD, YYYY")
+          date(fromNow: true)
           category
           featuredimage {
             name
@@ -281,20 +295,6 @@ export const IndexQuery = graphql`
                 width
               }
             }
-          }
-        }
-      }
-    }
-    markdownRemark(id: { eq: $id }) {
-      html
-      frontmatter {
-        seoTitle
-        seoDescription
-        categories {
-          title
-          links {
-            title
-            link
           }
         }
       }

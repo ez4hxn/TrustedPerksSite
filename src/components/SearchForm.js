@@ -8,9 +8,11 @@ const App = () => {
       allMdx {
         nodes {
           id
+          fields {
+            slug
+          }
           frontmatter {
             title
-            slug
             seoDescription
           }
         }
@@ -21,7 +23,7 @@ const App = () => {
   const [searchResults, setSearchResults] = useState([]);
   const search = new JsSearch.Search("id");
   search.addIndex(["frontmatter", "title"]);
-  search.addIndex(["frontmatter", "slug"]);
+  search.addIndex(["fields", "slug"]);
   search.addIndex(["frontmatter", "seoDescription"]);
   search.addDocuments(data.allMdx.nodes);
 
@@ -41,7 +43,7 @@ const App = () => {
 };
 
 const Results = ({ results, value }) => {
-  const result = value && results.slice(0, 7).map((item, index) => <Hit key={index} hit={item.frontmatter} />);
+  const result = value && results.slice(0, 7).map((item, index) => <Hit key={index} hit={item.frontmatter} slug={item.fields.slug} />);
 
   return result ? (
     <div className="search-results">
@@ -51,10 +53,10 @@ const Results = ({ results, value }) => {
   ) : null;
 };
 
-function Hit({ hit }) {
+function Hit({ hit, slug }) {
   return (
     <div className="result-name">
-      <Link to={`/${hit.slug}/`}>
+      <Link to={`${slug}/`}>
         <p>{hit.title}</p>
       </Link>
     </div>
