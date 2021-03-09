@@ -11,15 +11,20 @@ twitter: https://twitter.com/trusted_perks
 number: "#"
 dmca: true
 dmcaLink: "#"
+cookies:
+  enabled: true
+  message: To ensure the best experience on our website, we recommend that you
+    allow cookies, as described in our Privacy Policy.
 colors:
+  btnColor: "#fff"
+  headerTextColor: "#fff"
+  btnBackground: "#4f3c8b"
   background: "#f7f7f7"
+  btnHoverBackground: "#6c51bf"
+  navbarShadow: "#828282"
+  textColor: "#000"
   blockBackground: "#fff"
   headerBackground: "#4f3c8b"
-  textColor: "#000"
-  btnBackground: "#4f3c8b"
-  btnHoverBackground: "#6c51bf"
-  btnColor: "#fff"
-  navbarShadow: "#828282"
 topNav:
   - title: How To?
     link: /how-to/
