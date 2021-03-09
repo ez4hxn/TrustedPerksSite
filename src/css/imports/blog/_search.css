@@ -26,6 +26,9 @@
   color: var(--custom-color-4);
   width: 100%;
 }
+.ais-SearchBox {
+  text-align: center;
+}
 .instant-search [type="search"]::placeholder {
   color: var(--custom-color-4);
 }

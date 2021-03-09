@@ -1,5 +1,5 @@
 .social-icon {
-  background-color: var(--custom-color-5);
+  background-color: #ff9c00;
   font-size: 28px;
   border-radius: 50%;
   text-align: center;
@@ -13,10 +13,10 @@
   position: relative;
 }
 .social-icon:hover {
-  background-color: var(--custom-color-6);
+  background-color: #ff9c00;
 }
 .social-icon svg {
-  color: var(--custom-color-7);
+  color: #000000;
   position: absolute;
   display: block;
   top: 50%;

@@ -1,6 +1,6 @@
 .breadcrumbs {
   padding: 10px 0.75em;
-  border-bottom: 1px solid var(--custom-color-3);
+  border-bottom: 1px solid #000000;
 }
 .breadcrumbs .container {
   display: flex;

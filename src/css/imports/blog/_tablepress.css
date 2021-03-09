@@ -47,7 +47,7 @@ table > tbody > tr:last-child {
 .tablepress thead th {
   font-weight: 700;
   vertical-align: middle;
-  color: var(--custom-color-8);
+  color: #FFFFFF;
   background-color: var(--custom-color-3);
   font-size: 18px;
   text-align: center;
@@ -57,6 +57,7 @@ table > tbody > tr:last-child {
   vertical-align: middle;
   background: var(--custom-color-2);
   text-align: center;
+  font-weight: bold;
 }
 .item-detail {
   display: flex;
@@ -84,8 +85,57 @@ table > tbody > tr:last-child {
 .tablepress.table_s2 .row-hover tr:hover td.column-1 {
   background: #fff;
 }
+table#tablepress-2 td.column-1,
+table#tablepress-3 td.column-1,
+table#tablepress-4 td.column-1,
+table#tablepress-5 td.column-1,
+table#tablepress-6 td.column-1,
+table#tablepress-7 td.column-1 {
+  vertical-align: middle;
+  font-weight: bold;
+  background: #fbfbfb;
+}
+table#tablepress-2 td.column-2,
+table#tablepress-4 td.column-2,
+table#tablepress-5 td.column-2,
+table#tablepress-6 td.column-2,
+table#tablepress-7 td.column-2 {
+  text-align: center;
+  font-weight: bold;
+}
+table#tablepress-2 td,
+table#tablepress-3 td,
+table#tablepress-4 td,
+table#tablepress-5 td,
+table#tablepress-6 td,
+table#tablepress-7 td {
+  text-align: center;
+}
 .tablepress .su-button {
   min-width: 170px;
+}
+.mysections {
+  display: flex;
+  flex-wrap: wrap;
+}
+.mysections1 {
+  width: 40%;
+}
+.mysections1 img {
+  max-width: 100% !important;
+  padding-right: 10px;
+}
+.mysections2 {
+  width: 60%;
+}
+#tablepress-28 td {
+  text-align: center;
+}
+#tablepress-30 td {
+  text-align: center;
+}
+#tablepress-31 td {
+  text-align: center;
 }
 .tablepress a strong {
   pointer-events: none;
@@ -178,6 +228,63 @@ table > tbody > tr:last-child {
     overflow: hidden;
     display: block;
   }
+  .dom {
+    display: none !important;
+  }
+  table#tablepress-28 tbody > tr:nth-child(n + 2) {
+    display: none;
+  }
+  #tablepress-28 td.column-1 {
+    display: none;
+  }
+  #tablepress-28 thead th.column-2,
+  #tablepress-28 thead th.column-3 {
+    display: none;
+  }
+  #tablepress-28 tr.row-2.even {
+    display: flex;
+    flex-direction: column;
+  }
+  #tablepress-28 hr {
+    margin-top: 20px;
+    box-shadow: 0 1px 4px 2px black;
+  }
+  table#tablepress-30 tbody > tr:nth-child(n + 2) {
+    display: none;
+  }
+  #tablepress-30 td.column-1 {
+    display: none;
+  }
+  #tablepress-30 thead th.column-2,
+  #tablepress-30 thead th.column-3 {
+    display: none;
+  }
+  #tablepress-30 tr.row-2.even {
+    display: flex;
+    flex-direction: column;
+  }
+  #tablepress-30 hr {
+    margin-top: 20px;
+    box-shadow: 0 1px 4px 2px black;
+  }
+  table#tablepress-31 tbody > tr:nth-child(n + 2) {
+    display: none;
+  }
+  #tablepress-31 td.column-1 {
+    display: none;
+  }
+  #tablepress-31 thead th.column-2,
+  #tablepress-31 thead th.column-3 {
+    display: none;
+  }
+  #tablepress-31 tr.row-2.even {
+    display: flex;
+    flex-direction: column;
+  }
+  #tablepress-31 hr {
+    margin-top: 20px;
+    box-shadow: 0 1px 4px 2px black;
+  }
   .tablepress thead tr th:nth-child(2) {
     display: none;
   }
@@ -185,6 +292,11 @@ table > tbody > tr:last-child {
   .tablepress thead tr,
   .tablepress thead tr th:nth-child(1) {
     display: block;
+  }
+}
+@media (min-width: 768px) {
+  .dod {
+    display: none !important;
   }
 }
 .su-button span {

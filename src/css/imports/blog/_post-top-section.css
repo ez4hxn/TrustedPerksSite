@@ -43,7 +43,6 @@
   vertical-align: middle;
   width: 20px;
 }
-/* purgecss ignore */
 .disqus-comment-count {
   pointer-events: none;
 }

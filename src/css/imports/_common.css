@@ -89,7 +89,7 @@ a {
   transition: all 0.3s ease-out;
 }
 a:hover {
-  color: var(--custom-color-6);
+  color: #4f3c8b;
 }
 a:not(.btn) {
   transition: 0.3s ease;
@@ -107,7 +107,7 @@ img {
 }
 span {
   font-style: inherit;
-  font-weight: inherit;
+  font-weight: 500;
 }
 figure {
   display: block;
@@ -173,13 +173,16 @@ table {
 }
 .box:not(:last-child),
 .content:not(:last-child),
+.notification:not(:last-child),
 .title:not(:last-child),
+.subtitle:not(:last-child),
 .message:not(:last-child) {
   margin-bottom: 1.5rem;
 }
 .button,
 .input,
-.textarea {
+.textarea,
+.file-cta {
   -moz-appearance: none;
   -webkit-appearance: none;
   align-items: center;
@@ -201,12 +204,15 @@ table {
 .button:focus,
 .input:focus,
 .textarea:focus,
+.file-cta:focus,
 .button:active,
 .input:active,
 .textarea:active,
+.file-cta:active,
 .is-active.button,
 .is-active.input,
-.is-active.textarea {
+.is-active.textarea,
+.is-active.file-cta {
   outline: none;
 }
 .button {
@@ -349,6 +355,28 @@ table {
   height: auto;
   width: 100%;
 }
+.notification {
+  background-color: whitesmoke;
+  border-radius: 4px;
+  position: relative;
+  padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+}
+.notification a:not(.button):not(.dropdown-item) {
+  color: currentColor;
+  text-decoration: underline;
+}
+.notification code {
+  background: white;
+}
+.notification .title,
+.notification .subtitle,
+.notification .content {
+  color: currentColor;
+}
+.notification.is-link {
+  background-color: var(--custom-color-5);
+  color: #fff;
+}
 @keyframes moveIndeterminate {
   from {
     background-position: 200% 0;
@@ -357,10 +385,12 @@ table {
     background-position: -200% 0;
   }
 }
-.title {
+.title,
+.subtitle {
   word-break: break-word;
 }
-.title span {
+.title span,
+.subtitle span {
   font-weight: inherit;
 }
 .title {
@@ -368,6 +398,36 @@ table {
   font-size: 2rem;
   font-weight: 600;
   line-height: 1.125;
+}
+.title:not(.is-spaced) + .subtitle {
+  margin-top: -1.25rem;
+}
+.title.is-4 {
+  font-size: 1.5rem;
+}
+.title.is-6 {
+  font-size: 1rem;
+}
+.title.is-7 {
+  font-size: 0.75rem;
+}
+.subtitle {
+  color: #4a4a4a;
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.25;
+}
+.subtitle:not(.is-spaced) + .title {
+  margin-top: -1.25rem;
+}
+.subtitle.is-4 {
+  font-size: 1.5rem;
+}
+.subtitle.is-6 {
+  font-size: 1rem;
+}
+.subtitle.is-7 {
+  font-size: 0.75rem;
 }
 .heading {
   display: block;
@@ -510,7 +570,6 @@ input::placeholder {
   display: flex;
   margin-bottom: 5px;
 }
-/* purgecss ignore */
 div#gatsby-focus-wrapper > div {
   display: flex;
   flex-direction: column;
