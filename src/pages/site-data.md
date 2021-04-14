@@ -5,11 +5,12 @@ logoSmall: /img/logo.png
 logoLarge: /img/logo.png
 faviconSmall: /img/favicon-16x16.png
 faviconLarge: /img/favicon-32x32.png
-facebook: https://www.facebook.com/#
-youtube: https://www.youtube.com/#
+disqus: trusted-perks
+facebook: https://www.facebook.com/trustedperkscom
+youtube: ""
 twitter: https://twitter.com/trusted_perks
-number: "#"
-dmca: true
+number: ""
+dmca: false
 dmcaLink: "#"
 cookies:
   enabled: true
